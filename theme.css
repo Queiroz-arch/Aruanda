@@ -1,0 +1,751 @@
+/* =========================================================
+   Jardins de Aruanda — theme.css v2 (leve e consistente)
+   - remove blur/backdrop-filter por padrão
+   - remove gradientes pesados no <body>
+   - adiciona "modo desempenho": body.perf para podar efeitos restantes
+   - mantém classes existentes do seu HTML (login, dashboard, dock, tab, etc.)
+   ========================================================= */
+
+/* ---------- Design tokens ---------- */
+:root {
+  /* Cores base (dark) */
+  --bg-1: #0b1220;
+  --bg-2: #0f172a;
+  --bg-3: #111827;
+
+  /* Superfícies */
+  --surface-1: #101826;
+  --surface-2: #0f1a2b;
+  --surface-3: #0e1626;
+
+  /* Bordas */
+  --border-1: rgba(255,255,255,0.10);
+  --border-2: rgba(255,255,255,0.14);
+
+  /* Tipografia */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --text-1: #e5e7eb;
+  --text-2: #9ca3af;
+  --text-3: #6b7280;
+
+  /* Marca (verde) */
+  --primary: #029834;
+  --primary-600: #028a2f;
+  --primary-700: #027a2b;
+  --ring: rgba(2,152,52,0.45);
+
+  /* Estados */
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --success: #10b981;
+
+  /* Raio e sombras */
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --shadow-1: 0 4px 16px rgba(0,0,0,0.18);
+
+  /* Efeitos opcionais (podados no modo .perf) */
+  --bg-decoration: none;      /* sem gradiente por padrão */
+  --fx-backdrop: none;        /* evitar backdrop-filter */
+  --fx-transition: .12s;      /* tempo padrão de transições */
+}
+
+/* ---------- Modo desempenho (ligue no <body class="perf">) ---------- */
+body.perf {
+  --bg-decoration: none;
+  --fx-backdrop: none;
+  --fx-transition: .01ms;
+  --shadow-1: none;
+}
+
+/* Reset básico */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+
+/* ---------- Base ---------- */
+body {
+  margin: 0;
+  color: var(--text-1);
+  background:
+    var(--bg-1)
+    /* decorações desligadas por padrão; se quiser sutil, troque "none" abaixo por um radial leve */
+    , var(--bg-decoration);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+[hidden] { display: none !important; }
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ---------- Cartão genérico ---------- */
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: 16px;
+  box-shadow: var(--shadow-1);
+  /* Evita custo do blur no GPU */
+  backdrop-filter: var(--fx-backdrop);
+  /* Defer de renderização em conteúdos fora de tela */
+  content-visibility: auto;
+  contain-intrinsic-size: 300px 200px;
+}
+
+/* ---------- LOGIN ---------- */
+body.login {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 32px 16px;
+}
+#login-section { width: 100%; }
+.login-shell { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+
+.login .brand-logo {
+  width: 200px; height: 200px;
+  margin: 0 auto -18px;
+  background: center / contain no-repeat url('Logo.svg');
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.login-card {
+  width: 360px;
+  max-width: 92vw;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+/* ---------- Form ---------- */
+.login-form .form-field { margin-bottom: 12px; }
+.login-form .form-label {
+  display: block;
+  margin: 0 0 6px;
+  color: #93a1b5;
+  font-size: 0.9rem;
+}
+
+.input, .input-with-btn {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  min-height: 44px;
+  transition: border-color var(--fx-transition) ease;
+}
+.input:focus-within, .input-with-btn:focus-within { border-color: var(--ring); }
+
+.input.invalido, .input-with-btn.invalido { border-color: var(--danger) !important; }
+
+.input input, .input select, .input textarea, .input-with-btn input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--text-1);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.input input::placeholder { color: var(--text-3); }
+
+.input select { appearance: none; -webkit-appearance: none; -moz-appearance: none; }
+
+.toggle-visibility {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px 6px;
+}
+.toggle-visibility:hover { color: var(--text-1); text-decoration: underline; }
+
+.form-feedback {
+  min-height: 16px;
+  color: var(--danger);
+  font-size: 12px;
+  margin: 6px 2px 0;
+}
+
+/* ---------- Botões ---------- */
+.btn-primary, .btn-secondary {
+  appearance: none;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--fx-transition) ease, filter var(--fx-transition) ease, background var(--fx-transition) ease;
+  will-change: transform;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #eaffef;
+  border: 0;
+  width: 100%;
+}
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-primary:active { transform: translateY(1px); }
+
+.btn-secondary {
+  background: var(--surface-2);
+  color: var(--text-1);
+  border: 1px solid var(--border-1);
+}
+.btn-secondary:hover { background: var(--surface-3); }
+
+.btn-primary.carregando {
+  position: relative;
+  pointer-events: none;
+  opacity: .95;
+  padding-left: 40px;
+}
+.btn-primary.carregando::after {
+  content: "";
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  left: 16px; top: 50%; transform: translateY(-50%);
+  animation: spin .8s linear infinite;
+}
+
+/* ---------- DASHBOARD ---------- */
+body.dashboard .wrap {
+  max-width: 1200px;
+  margin: 28px auto 40px;
+  padding: 0 18px;
+}
+
+body.dashboard .title { text-align: center; margin: 8px 0 18px; }
+body.dashboard .brand-logo {
+  width: 140px; height: 140px;
+  margin: 0 auto 6px;
+  background: center / contain no-repeat url('Logo.svg');
+}
+
+.card-dock { margin-bottom: 18px; }
+
+.dock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius-lg);
+  /* sem blur */
+  backdrop-filter: var(--fx-backdrop);
+  box-shadow: var(--shadow-1);
+  content-visibility: auto;
+  contain-intrinsic-size: 200px 80px;
+}
+.dock .spacer { flex: 1 1 auto; }
+
+.tab {
+  padding: 8px 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background-color var(--fx-transition) ease, color var(--fx-transition) ease, border-color var(--fx-transition) ease;
+}
+.tab:hover { color: var(--text-1); border-color: var(--border-1); }
+.tab.active {
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-weight: 700;
+  border-color: var(--ring);
+}
+
+.tab.logout {
+  background: var(--danger);
+  color: #fff;
+  border: 1px solid rgba(239,68,68,0.65);
+}
+.tab.logout:hover { filter: brightness(1.05); }
+
+.card-content { padding-top: 0; }
+
+.panel {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  background: var(--bg-2);
+  content-visibility: auto;
+  contain-intrinsic-size: 400px 200px;
+}
+.panel + .panel { margin-top: 14px; }
+
+/* Grid utilitária */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+}
+.col-12 { grid-column: span 12; }
+.col-6  { grid-column: span 6; }
+.col-4  { grid-column: span 4; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.label { color: var(--text-2); font-size: 12px; }
+
+/* Tabelas */
+.table-wrap { overflow: auto; border-radius: 10px; content-visibility: auto; contain-intrinsic-size: 600px 320px; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+.table th, .table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  font-size: 13px;
+  color: #cbd5e1;
+  text-align: center;
+  white-space: nowrap;
+}
+.table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-2);
+  z-index: 1;
+}
+.table button {
+  background: transparent;
+  border: 1px solid var(--border-1);
+  color: var(--text-2);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--fx-transition) ease;
+}
+.table button:hover {
+  background: var(--surface-2);
+  color: var(--text-1);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+.table button:active { transform: scale(0.98); }
+
+/* Chips e status */
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-1);
+  color: #cfd7e3;
+  font-size: 12px;
+  transition: transform var(--fx-transition) ease, border-color var(--fx-transition) ease;
+}
+.chip:hover { transform: translateY(-1px); border-color: var(--ring); }
+
+.status {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 72px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  border: 1px solid var(--border-1);
+  background: rgba(16,185,129,.12);
+  color: #d1fae5;
+}
+
+/* Credenciais */
+#section-credenciais .grid { gap: 14px 16px; align-items: start; }
+#section-credenciais .checks[role="group"] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+}
+#section-credenciais .checks input[type="checkbox"] {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+#section-credenciais .toggle-chip {
+  display: inline-flex; align-items: center;
+  gap: 8px; padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-1);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-size: 13px;
+  cursor: pointer; user-select: none;
+  transition: background var(--fx-transition) ease, border-color var(--fx-transition) ease;
+}
+#section-credenciais .toggle-chip[aria-pressed="true"] {
+  background: rgba(2,152,52,.15);
+  border-color: var(--ring);
+}
+
+/* Erros de campo */
+.field-error { color: var(--danger); font-size: 12px; min-height: 16px; }
+
+/* Utilitários de espaçamento */
+.mb-10 { margin-bottom: 10px; }
+.mb-6 { margin-bottom: 6px; }
+.spacer-8 { height: 8px; }
+.spacer-12 { height: 12px; }
+
+/* ---------- Notificações (toast) ---------- */
+.notify-container{position:fixed;left:16px;bottom:32px;display:flex;flex-direction:column;gap:10px;z-index:2147483647;pointer-events:none}
+.notify{pointer-events:auto;min-width:260px;max-width:min(92vw,380px);background:#111827;color:#f9fafb;border:1px solid rgba(255,255,255,.08);border-radius:12px;box-shadow:none;overflow:hidden;opacity:1;transform:translateY(6px);will-change:transform,opacity;border-top-left-radius:10px;border-top-right-radius:10px;animation:notify-in 180ms ease-out forwards}
+.notify__progress{height:3px;background:#34d399;transform-origin:left center;width:100%}
+.notify__body{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.notify__icon{flex:0 0 auto;width:18px;height:18px;opacity:.95;display:block;align-self:center}
+.notify__content{flex:1 1 auto;font-size:14px;line-height:1.35}
+.notify__title{font-weight:600;margin:0 0 2px}
+.notify__text{margin:0}
+.notify__close{flex:0 0 auto;appearance:none;background:transparent;border:0;color:#9ca3af;cursor:pointer;padding:4px;margin:-4px;border-radius:6px}
+.notify__close:hover{color:#e5e7eb;background:rgba(255,255,255,.06)}
+.notify--sucesso .notify__progress{background:#34d399}
+.notify--erro .notify__progress{background:#ef4444}
+.notify--informacao .notify__progress{background:#3b82f6}
+@keyframes notify-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes notify-out{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(4px)}}
+.notify.is-leaving{animation:notify-out 220ms cubic-bezier(.4,0,.2,1) forwards}
+
+/* ---------- Animações ---------- */
+@keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 1200px) { .wrap { padding: 0 12px; } }
+@media (max-width: 960px)  {
+  .dock { gap: 6px; padding: 10px 12px; }
+  .tab  { padding: 8px 10px; }
+  .col-6 { grid-column: span 12; }
+  .col-4 { grid-column: span 6; }
+}
+@media (max-width: 640px)  {
+  .wrap { margin: 18px auto 28px; padding: 0 12px; }
+  .dock { overflow-x: auto; white-space: nowrap; scrollbar-width: thin; }
+  .dock .spacer { display: none; }
+  .tab { flex: 0 0 auto; }
+  .col-4 { grid-column: span 12; }
+  .title { font-size: 22px; }
+  #section-credenciais .checks[role="group"] { grid-template-columns: 1fr; }
+}
+
+/* ---------- Preferência de redução de movimento ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+
+/* ---- Fix duplicação visual de campos ---- */
+.input { grid-template-columns: 1fr; }              /* 1 coluna por padrão */
+.input:has(button) { grid-template-columns: 1fr auto; }  /* 2 colunas só quando existir botão */
+
+.input input,
+.input select,
+.input textarea,
+.input-with-btn input {
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+
+/* ===================== TALENTO PASS =====================
+   - Chips mais elegantes (toggle-chip)
+   - Headings e labels com hierarquia visual
+   - Grids equilibradas e compactas para grupos de checks
+   - Estados de foco/hover/ativo com feedback sutil
+   ======================================================= */
+
+/* Headings/labels */
+.field .label,
+#section-credenciais .label {
+  color: #a8b4c7;
+  font-weight: 600;
+  letter-spacing: .02em;
+  margin-bottom: 8px;
+  text-transform: none;
+}
+
+/* Grupos de checks com layout balanceado */
+#section-credenciais .checks[role="group"] {
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px 12px;
+  align-content: start;
+}
+
+/* Chip base */
+#section-credenciais .toggle-chip {
+  position: relative;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-1);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 1px 0 rgba(0,0,0,.22);
+  color: #d2dae7;
+  transition: border-color var(--fx-transition) ease,
+             background var(--fx-transition) ease,
+             transform var(--fx-transition) ease,
+             box-shadow var(--fx-transition) ease;
+}
+
+/* Indicador (bolinha) sem precisar de markup extra */
+#section-credenciais .toggle-chip::before {
+  content: "";
+  width: 8px; height: 8px;
+  margin-right: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.25);
+  background: transparent;
+  display: inline-block;
+  transform: translateY(1px);
+}
+
+#section-credenciais .toggle-chip:hover {
+  transform: translateY(-1px);
+  border-color: var(--ring);
+}
+
+#section-credenciais .toggle-chip:active { transform: translateY(0); }
+
+#section-credenciais .toggle-chip:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Ativo */
+#section-credenciais .toggle-chip[aria-pressed="true"] {
+  background:
+    linear-gradient(180deg, rgba(2,152,52,.22), rgba(2,152,52,.12));
+  border-color: rgba(2,152,52,.55);
+  color: #e6fff0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 0 3px rgba(2,152,52,.14);
+}
+#section-credenciais .toggle-chip[aria-pressed="true"]::before {
+  background: var(--primary);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(2,152,52,.22);
+}
+
+/* Variante compacta opcional (adicione .compact no wrapper .checks) */
+#section-credenciais .checks.compact[role="group"] {
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: 8px;
+}
+#section-credenciais .checks.compact .toggle-chip {
+  padding: 7px 10px;
+  font-size: 12px;
+}
+
+/* Distância vertical entre blocos */
+#section-credenciais .panel .field { margin-bottom: 12px; }
+#section-credenciais .panel .field:last-child { margin-bottom: 0; }
+
+
+/* ==================== Single Radius Override ====================
+   Unifica a borda do site inteiro para um único raio (menos "boliado").
+   Ajuste o valor de --radius abaixo e tudo acompanha.
+   ================================================================ */
+:root { --radius: 8px; }
+
+:where(
+  .card,
+  .login-card,
+  .input,
+  .input-with-btn,
+  .btn-primary,
+  .btn-secondary,
+  .dock,
+  .tab,
+  .panel,
+  .table-wrap,
+  .chip,
+  .status,
+  #section-credenciais .toggle-chip,
+  .notify,
+  .notify__close,
+  .notify-container,
+  .table button
+){ border-radius: var(--radius) !important; }
+
+/* Remove pílula dos elementos que usavam 999px */
+:where(.chip, .status, #section-credenciais .toggle-chip){ border-radius: var(--radius) !important; }
+:where(.chip, .status){ padding-block: 6px; }
+
+/* Ajuste suave nos botões para combinar com o novo raio */
+.btn-primary, .btn-secondary { padding: 10px 12px; }
+
+
+/* ==================== Select Temático + Responsivo ==================== */
+/* Remove aparência nativa e aplica tema escuro coerente */
+.input select, select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  background-color: transparent;
+  color: var(--text-1);
+  border: 0;
+  outline: 0;
+  font: inherit;
+  line-height: 1.25;
+  padding: 6px 0; /* o container .input dá o padding horizontal */
+}
+/* Evita seta antiga do IE */
+select::-ms-expand { display: none; }
+
+/* Wrapper com seta SVG e área de clique maior, sem HTML novo usando :has() */
+.input:has(select) {
+  position: relative;
+  padding-right: 40px; /* espaço para a seta */
+}
+.input:has(select)::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") center/18px 18px no-repeat;
+  opacity: .9;
+}
+
+/* Estado focado coerente */
+.input:has(select):focus-within {
+  border-color: var(--ring);
+}
+
+/* Opções do dropdown (nativo) com tema escuro
+   Observação: alguns sistemas ainda impõem o menu do SO;
+   onde for possível, essa regra aplica. */
+select option, select optgroup {
+  background-color: var(--bg-2);
+  color: var(--text-1);
+}
+select option:disabled {
+  color: var(--text-3);
+}
+/* Destaca a opção selecionada em navegadores que permitem */
+select option:checked {
+  background-color: rgba(2,152,52,.28);
+  color: #fff;
+}
+
+/* Ajuste de contraste quando o usuário usa alto contraste do SO */
+@media (prefers-contrast: more) {
+  .input:has(select)::after { opacity: 1; }
+  select option:checked { background-color: var(--primary-700); }
+}
+
+/* --------- Responsividade extra para formulários longos --------- */
+@media (max-width: 820px) {
+  /* Campos em coluna única em telas menores */
+  .form-row, .grid.form { grid-template-columns: 1fr !important; }
+  .input, .input-with-btn { min-height: 42px; }
+}
+
+/* Scrollbar discreta em listas longas (onde o UA permitir) */
+select::-webkit-scrollbar { width: 10px; }
+select::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 6px; }
+select::-webkit-scrollbar-track { background: rgba(255,255,255,.06); }
+
+
+/* ==================== Equal Width Buttons ====================
+   Faz os botões/chips terem o MESMO tamanho, independente do texto.
+   - A grid define colunas com largura fixa/fluida.
+   - Cada .toggle-chip ocupa 100% da coluna e centraliza o label.
+   Ajuste --chip-col-min para controlar a largura mínima da coluna.
+================================================================ */
+:root { --chip-col-min: 128px; }
+
+#section-credenciais .checks[role="group"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--chip-col-min), 1fr));
+  gap: 12px;
+}
+
+#section-credenciais .toggle-chip {
+  width: 100%;                 /* ocupa a coluna toda */
+  justify-content: center;     /* texto centralizado */
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 36px;
+  line-height: 1.2;
+}
+
+/* Variante compacta continua obedecendo a largura igual */
+#section-credenciais .checks.compact[role="group"] {
+  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  gap: 10px;
+}
+#section-credenciais .checks.compact .toggle-chip {
+  min-height: 32px;
+}
+
+/* Utilitário opcional para linhas de botões fora de credenciais */
+.btn-row.equal {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 10px;
+}
+.btn-row.equal > .btn-primary,
+.btn-row.equal > .btn-secondary,
+.btn-row.equal > button {
+  width: 100%;
+  justify-self: stretch;
+}
+
+
+/* ==================== Cards separados (patch) ====================
+   Garante separação visível entre o card de "Nova credencial" e o de "CREDENCIAS".
+   Aplica espaçamento entre cards e evita que margens internas "comam" a borda.
+=================================================================== */
+.card + .card,
+.card + .panel,
+.panel + .card,
+.card + .table-wrap,
+.table-wrap + .card {
+  margin-top: 18px;
+}
+
+/* Evita colapso de margem que some com a borda do card */
+.card > :first-child { margin-top: 0; }
+.card > :last-child  { margin-bottom: 0; }
+
+
+/* ===== Force Background Color (no layout changes) ===== */
+:root { --bg-1: #0b1220; } /* mantém a paleta do backup */
+html { background-color: var(--bg-1) !important; }
+body {
+  background-color: var(--bg-1) !important;
+  background-image: none !important;
+}
