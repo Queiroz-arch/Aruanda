@@ -1,0 +1,235 @@
+/* ============================================= */
+/* LOGIN.CSS — SPLIT-SCREEN LAYOUT             */
+/* ============================================= */
+
+/* ---------- RESET UNIVERSAL ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- GLOBAIS E BODY ---------- */
+:root {
+  --color-primary: #029834;
+  --color-primary-dark: #027a2b;
+  --color-bg-light: #f9fafb; /* Cinza bem claro */
+  --color-bg-dark: #111827; /* Fundo do painel do form */
+  --color-text-light: #1f2937;
+  --color-text-dark: #f9fafb;
+  --color-text-muted: #6b7280;
+  --color-border: #374151;
+}
+
+body.login-page {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg-dark);
+}
+
+/* ---------- CONTAINER SPLIT-SCREEN ---------- */
+.login-container-split {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ---------- PAINEL ESQUERDO (VISUAL) ---------- */
+.login-panel-left {
+  flex: 1;
+  background: linear-gradient(135deg, var(--color-primary), #111827);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  text-align: center;
+  color: var(--color-text-dark);
+}
+
+.brand-logo-svg {
+  width: 300px;
+  height: 300px;
+  margin-bottom: 1.5rem;
+}
+
+.brand-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.brand-subtitle {
+  font-size: 1.125rem;
+  max-width: 400px;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+/* ---------- PAINEL DIREITO (FORMULÁRIO) ---------- */
+.login-panel-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-header {
+  text-align: left;
+  margin-bottom: 2.5rem;
+}
+
+.login-header .title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.login-header .subtitle {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ---------- FORMULÁRIO E CAMPOS ---------- */
+#login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #d1d5db;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  background-color: #1f2937; /* Um pouco mais claro que o fundo */
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  color: var(--color-text-dark);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+}
+
+.toggle-visibility {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  background: none; border: none; color: var(--color-text-muted); cursor: pointer;
+}
+
+/* ---------- OPÇÕES ADICIONAIS (LEMBRAR, ESQUECI) ---------- */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #d1d5db;
+}
+
+#remember {
+  accent-color: var(--color-primary);
+}
+
+.forgot-password a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- BOTÃO DE LOGIN ---------- */
+.btn-primary {
+  width: 100%;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-primary:disabled {
+  background-color: #374151;
+  cursor: not-allowed;
+}
+
+/* ---------- LINK DE CADASTRO ---------- */
+.signup-link {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--color-text-muted);
+}
+
+.signup-link a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 768px) {
+  .login-container-split {
+    flex-direction: column;
+  }
+  .login-panel-left {
+    display: none; /* Oculta o painel visual em telas pequenas para focar no form */
+  }
+  .login-panel-right {
+    padding: 2rem 1rem;
+    align-items: flex-start;
+  }
+}
+
+/* ---------- ANIMAÇÃO DE LOADING ---------- */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.loading-icon {
+  animation: spin 1s linear infinite;
+}

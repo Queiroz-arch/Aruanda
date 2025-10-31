@@ -1,0 +1,125 @@
+/* ============================================= */
+/* NOTIFICATIONS.CSS                             */
+/* ============================================= */
+
+/* ---------- CONTAINER DAS NOTIFICAÇÕES ---------- */
+.notification-container {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 1000;
+}
+
+/* ---------- ESTILO BASE DA NOTIFICAÇÃO ---------- */
+.notification {
+  width: 100%;
+  max-width: 350px;
+  background-color: #2d3748; /* Cinza escuro */
+  color: #f7fafc; /* Branco */
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  overflow: hidden; /* Garante que a barra de progresso fique contida */
+  transform: translateX(-150%);
+  animation: slideIn 0.5s forwards ease-out;
+  cursor: pointer;
+}
+
+/* Animação de entrada */
+@keyframes slideIn {
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Animação de saída (será adicionada via JS) */
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+}
+
+.notification.exiting {
+    animation: slideOut 0.5s forwards ease-in;
+}
+
+
+.notification-content {
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notification-icon {
+  flex-shrink: 0;
+}
+
+.notification-message {
+  flex-grow: 1;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ---------- BARRA DE PROGRESSO ---------- */
+.notification-progress {
+  height: 4px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.notification-progress-bar {
+  height: 100%;
+  width: 0; /* A animação controlará a largura */
+  background-color: white;
+  border-radius: 0 2px 2px 0;
+  animation-name: progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes progress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+/* Pausa a animação da barra ao passar o mouse */
+.notification:hover .notification-progress-bar {
+  animation-play-state: paused;
+}
+
+
+/* ---------- TIPOS DE NOTIFICAÇÃO ---------- */
+
+/* SUCESSO */
+.notification.success {
+  background-color: #029834; /* Verde do tema */
+  border-left: 5px solid #027a2b;
+}
+.notification.success .notification-progress-bar {
+  background-color: #ffffff;
+}
+
+/* ERRO */
+.notification.error {
+  background-color: #c53030; /* Vermelho */
+  border-left: 5px solid #9b2c2c;
+}
+.notification.error .notification-progress-bar {
+  background-color: #ffffff;
+}
+
+/* INFORMAÇÃO */
+.notification.info {
+  background-color: #2b6cb0; /* Azul */
+  border-left: 5px solid #2c5282;
+}
+.notification.info .notification-progress-bar {
+  background-color: #ffffff;
+}
